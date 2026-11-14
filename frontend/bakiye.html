@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bakiye · Yemekhane</title>
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <main class="kapsayici">
+    <h1>Bakiye</h1>
+    <p id="bildirim" hidden></p>
+
+    <div class="iki-sutun">
+      <section class="kart">
+        <h2>Güncel bakiye</h2>
+        <p class="bakiye-buyuk" id="bakiye">—</p>
+
+        <form id="yukle-formu" novalidate>
+          <label for="tutar">Yüklenecek tutar (10–1000 TL)</label>
+          <div class="hizli-tutarlar">
+            <button type="button" class="dugme dugme-kucuk dugme-ikincil" data-tutar="50">50 TL</button>
+            <button type="button" class="dugme dugme-kucuk dugme-ikincil" data-tutar="100">100 TL</button>
+            <button type="button" class="dugme dugme-kucuk dugme-ikincil" data-tutar="250">250 TL</button>
+          </div>
+          <div class="alan">
+            <input id="tutar" type="number" inputmode="decimal" step="0.01" placeholder="Tutar">
+          </div>
+          <button type="submit" class="dugme">Bakiye yükle</button>
+        </form>
+      </section>
+
+      <section class="kart">
+        <h2>Hareket geçmişi</h2>
+        <ul id="hareketler" class="liste"></ul>
+      </section>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ortak.js"></script>
+  <script src="/js/bakiye.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rezervasyonlarım · Yemekhane</title>
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <main class="kapsayici">
+    <h1>Rezervasyonlarım</h1>
+
+    <form class="filtre">
+      <div>
+        <label for="durum">Durum</label>
+        <select id="durum">
+          <option value="">Tümü</option>
+          <option value="aktif">Aktif</option>
+          <option value="kullanildi">Kullanıldı</option>
+          <option value="iptal">İptal</option>
+        </select>
+      </div>
+    </form>
+
+    <p id="bildirim" hidden></p>
+    <section class="kart">
+      <ul id="liste" class="liste" aria-live="polite"></ul>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ortak.js"></script>
+  <script src="/js/rezervasyonlarim.js"></script>
+</body>
+</html>

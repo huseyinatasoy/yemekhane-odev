@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Yönetici Paneli · Yemekhane</title>
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <main class="kapsayici">
+    <h1>Yönetici Paneli</h1>
+    <p id="bildirim" hidden></p>
+
+    <section class="kart">
+      <h2 id="form-baslik">Yeni menü</h2>
+      <form id="menu-formu" novalidate>
+        <input type="hidden" id="menu-id">
+        <div class="filtre">
+          <div>
+            <label for="f-yemekhane">Yemekhane</label>
+            <select id="f-yemekhane"></select>
+          </div>
+          <div>
+            <label for="f-tarih">Tarih</label>
+            <input id="f-tarih" type="date">
+          </div>
+          <div>
+            <label for="f-ogun">Öğün</label>
+            <select id="f-ogun"></select>
+          </div>
+          <div>
+            <label for="f-ogrenci">Öğrenci fiyatı (TL)</label>
+            <input id="f-ogrenci" type="number" step="0.01" min="0" inputmode="decimal">
+          </div>
+          <div>
+            <label for="f-personel">Personel fiyatı (TL)</label>
+            <input id="f-personel" type="number" step="0.01" min="0" inputmode="decimal">
+          </div>
+        </div>
+
+        <label>Yemekler</label>
+        <div class="yemek-secim alan" id="yemek-secim"></div>
+
+        <button type="submit" class="dugme" id="kaydet">Menüyü oluştur</button>
+        <button type="button" class="dugme dugme-ikincil" id="vazgec" hidden>Vazgeç</button>
+      </form>
+    </section>
+
+    <section class="kart">
+      <h2>Menü bazında doluluk ve puan</h2>
+      <form class="filtre" id="rapor-filtre">
+        <div>
+          <label for="r-baslangic">Başlangıç</label>
+          <input id="r-baslangic" type="date">
+        </div>
+        <div>
+          <label for="r-bitis">Bitiş</label>
+          <input id="r-bitis" type="date">
+        </div>
+      </form>
+      <div class="tablo-kaydir">
+        <table class="tablo">
+          <thead>
+            <tr>
+              <th>Tarih</th><th>Yemekhane</th><th>Öğün</th><th>Rezerve / Kapasite</th>
+              <th>Doluluk</th><th>Ort. puan</th><th>Fiyat (Öğr./Pers.)</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="rapor"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ortak.js"></script>
+  <script src="/js/yonetici.js"></script>
+</body>
+</html>

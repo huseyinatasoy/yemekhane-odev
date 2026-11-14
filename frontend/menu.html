@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Günün Menüsü · Yemekhane</title>
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <main class="kapsayici">
+    <h1>Günün Menüsü</h1>
+
+    <form id="filtre" class="filtre">
+      <div>
+        <label for="yemekhane">Yemekhane</label>
+        <select id="yemekhane"></select>
+      </div>
+      <div>
+        <label for="tarih">Tarih</label>
+        <input id="tarih" type="date">
+      </div>
+      <div>
+        <label for="ogun">Öğün</label>
+        <select id="ogun"></select>
+      </div>
+    </form>
+
+    <p id="bildirim" hidden></p>
+    <section id="menu" class="kart" aria-live="polite"></section>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ortak.js"></script>
+  <script src="/js/menu.js"></script>
+</body>
+</html>

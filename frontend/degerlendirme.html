@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Değerlendirme · Yemekhane</title>
+  <link rel="stylesheet" href="/css/temel.css">
+  <link rel="stylesheet" href="/css/uygulama.css">
+</head>
+<body>
+  <main class="kapsayici">
+    <h1>Değerlendirme</h1>
+    <p class="soluk">Yalnızca kullandığınız (turnikeden geçtiğiniz) menülere puan verebilirsiniz.</p>
+    <p id="bildirim" hidden></p>
+
+    <div class="iki-sutun">
+      <section class="kart">
+        <h2>Puan ver</h2>
+        <form id="form" novalidate>
+          <div class="alan">
+            <label for="menu">Menü</label>
+            <select id="menu" required></select>
+          </div>
+
+          <fieldset class="yildizlar">
+            <legend class="soluk">Puanınız</legend>
+            <input type="radio" id="p5" name="puan" value="5"><label for="p5" title="5">★</label>
+            <input type="radio" id="p4" name="puan" value="4"><label for="p4" title="4">★</label>
+            <input type="radio" id="p3" name="puan" value="3"><label for="p3" title="3">★</label>
+            <input type="radio" id="p2" name="puan" value="2"><label for="p2" title="2">★</label>
+            <input type="radio" id="p1" name="puan" value="1"><label for="p1" title="1">★</label>
+          </fieldset>
+
+          <div class="alan">
+            <label for="yorum">Yorum (isteğe bağlı)</label>
+            <textarea id="yorum" rows="3" maxlength="500"></textarea>
+          </div>
+          <button type="submit" class="dugme">Gönder</button>
+        </form>
+      </section>
+
+      <section class="kart">
+        <h2>Verdiğim puanlar</h2>
+        <ul id="gecmis" class="liste"></ul>
+      </section>
+    </div>
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/ortak.js"></script>
+  <script src="/js/degerlendirme.js"></script>
+</body>
+</html>
