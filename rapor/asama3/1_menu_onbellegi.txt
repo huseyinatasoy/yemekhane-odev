@@ -1,0 +1,19 @@
+# 1) Önbellek boş
+$ docker compose exec redis redis-cli KEYS menu:*
+
+
+# 2) Aynı menü iki kez istenir: GET /api/menu?yemekhane_id=1&tarih=2026-11-15&ogun_id=2
+$ docker compose logs uygulama | grep ÖNBELLEK
+[ÖNBELLEK] menu:1:2026-11-15:2 -> veritabanından geldi
+[ÖNBELLEK] menu:1:2026-11-15:2 -> Redis'ten geldi
+
+# 3) Kayıt Redis'te ve gün sonuna kadar yaşar (TTL saniye)
+$ docker compose exec redis redis-cli KEYS menu:*
+menu:1:2026-11-15:2
+
+$ docker compose exec redis redis-cli TTL menu:1:2026-11-15:2
+111381
+
+$ docker compose exec redis redis-cli GET menu:1:2026-11-15:2
+{"menu_id":50,"tarih":"2026-11-15","yemekhane":"Merkez Yemekhane","ogun":"Öğle","rezervasyon_son":"2026-11-15 10:00:00","ogrenci_fiyati":40,"personel_fiyati":90,"toplam_kalori":1080,"yemekler":[{"id":6,"ad":"Sebze Çorbası","kategori":"Çorba","kalori":120,"vejetaryen":true,"alerjenler":["Kereviz"]},{"id":11,"ad":"Izgara Köfte","kategori":"Ana Yemek","kalori":450,"vejetaryen":false,"alerjenler":["Gluten","Yumurta"]},{"id":25,"ad":"Fırın Makarna","kategori":"Yardımcı Yemek","kalori":420,"vejetaryen":true,"alerjenler":["Gluten","Süt","Yumurta"]},{"id":29,"ad":"Çoban Salata","kategori":"Salata ve Meze","kalori":90,"vejetaryen":true,"alerjenler":[]}]}
+

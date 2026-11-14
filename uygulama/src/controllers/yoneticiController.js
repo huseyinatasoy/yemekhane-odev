@@ -1,5 +1,6 @@
 // Yönetici paneli: menü oluşturma/düzenleme, doluluk ve puan raporu
 const menuRepo = require('../data/menuRepo');
+const menuOnbellek = require('../services/menuOnbellek');
 const dogrula = require('./dogrula');
 const { KullaniciHatasi } = require('../middleware/hata');
 
@@ -63,6 +64,8 @@ async function olustur(req, res, next) {
       if (hata.errno === 1062) throw new KullaniciHatasi('Bu yemekhane, tarih ve öğün için zaten bir menü var.');
       throw hata;
     }
+    // Aynı anahtarda eski bir kayıt kalmasın
+    await menuOnbellek.sil(menu.yemekhane_id, menu.tarih, menu.ogun_id);
     res.status(201).json({ mesaj: 'Menü oluşturuldu.', menu_id: menuId });
   } catch (hata) {
     next(hata);
@@ -75,6 +78,9 @@ async function guncelle(req, res, next) {
     const menuId = dogrula.tamSayi(req.params.id, 'menü');
     const sonuc = await menuRepo.menuGuncelle(menuId, menuGirdisi(req.body));
     if (!sonuc) throw new KullaniciHatasi('Menü bulunamadı.', 404);
+    // Önbellek geçersizleştirme: veritabanı güncellendikten SONRA eski kayıt silinir,
+    // bir sonraki istek yeni menüyü veritabanından okuyup Redis'e yazar.
+    await menuOnbellek.sil(sonuc.yemekhane_id, sonuc.tarih, sonuc.ogun_id);
     res.json({ mesaj: 'Menü güncellendi.' });
   } catch (hata) {
     next(hata);

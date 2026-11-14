@@ -5,6 +5,7 @@
 const express = require('express');
 const router = require('./routes');
 const { hataYakalayici } = require('./middleware/hata');
+const redis = require('./services/redis');
 
 const app = express();
 const PORT = 8000;
@@ -27,6 +28,9 @@ app.use('/api', (req, res) => res.status(404).json({ hata: 'İstenen adres bulun
 
 app.use(hataYakalayici);
 
-app.listen(PORT, () => {
-  console.log(`Uygulama ${PORT} portunda çalışıyor.`);
+// Önce Redis'e bağlan, sonra istekleri kabul etmeye başla
+redis.connect().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Uygulama ${PORT} portunda çalışıyor.`);
+  });
 });

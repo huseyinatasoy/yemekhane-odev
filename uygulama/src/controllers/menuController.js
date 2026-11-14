@@ -1,5 +1,6 @@
 // Menü ekranları: günün menüsü ve haftalık menü
 const menuRepo = require('../data/menuRepo');
+const menuOnbellek = require('../services/menuOnbellek');
 const dogrula = require('./dogrula');
 
 // GET /api/yemekhaneler
@@ -52,8 +53,11 @@ async function gununMenusu(req, res, next) {
     const tarih = dogrula.tarih(req.query.tarih);
     const ogunId = dogrula.tamSayi(req.query.ogun_id, 'öğün');
 
-    const satirlar = await menuRepo.menuDetay(yemekhaneId, tarih, ogunId);
-    res.json({ menu: menuNesnesi(satirlar) });
+    // Önce Redis'e bakılır; yoksa veritabanından okunup Redis'e yazılır
+    const menu = await menuOnbellek.getir(yemekhaneId, tarih, ogunId, async () =>
+      menuNesnesi(await menuRepo.menuDetay(yemekhaneId, tarih, ogunId))
+    );
+    res.json({ menu });
   } catch (hata) {
     next(hata);
   }

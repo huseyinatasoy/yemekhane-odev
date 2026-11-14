@@ -1,0 +1,13 @@
+# Yönetici menü 50'yi (Merkez, 2026-11-15, Öğle) düzenler: PUT /api/yonetici/menuler/50
+Önce:
+"yemekler":[{"id":6,"ad":"Sebze Çorbası","kategori":"Çorba","kalori":120,"vejetaryen":true,"alerjenler":["Kereviz"]},{"id":11,"ad":"Izgara Köfte","kategori"
+{"mesaj":"Menü güncellendi."}
+$ docker compose logs uygulama | grep ÖNBELLEK
+[ÖNBELLEK] menu:1:2026-11-15:2 silindi (1 kayıt)
+
+$ docker compose exec redis redis-cli EXISTS menu:1:2026-11-15:2
+0
+
+# Sonraki istek yeni menüyü veritabanından alır
+"ogrenci_fiyati":42,"personel_fiyati":92
+[ÖNBELLEK] menu:1:2026-11-15:2 -> veritabanından geldi

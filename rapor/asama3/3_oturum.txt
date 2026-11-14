@@ -1,0 +1,23 @@
+# Giriş yapıldı, oturum Redis'te
+$ docker compose exec redis redis-cli KEYS oturum:175598de07fa628d9017e1384ade75558b7d90ec29182d4ee3159bd7fd5fcbe8
+oturum:175598de07fa628d9017e1384ade75558b7d90ec29182d4ee3159bd7fd5fcbe8
+
+$ docker compose exec redis redis-cli TTL oturum:175598de07fa628d9017e1384ade75558b7d90ec29182d4ee3159bd7fd5fcbe8
+1799
+
+$ docker compose exec redis redis-cli GET oturum:175598de07fa628d9017e1384ade75558b7d90ec29182d4ee3159bd7fd5fcbe8
+{"id":7,"ad":"Mehmet","soyad":"Yıldız","rol":"ogrenci"}
+
+# Uygulama container'ı yeniden başlatılır
+$ docker compose restart uygulama
+ Container yemekhane-uygulama-1 Restarting 
+ Container yemekhane-uygulama-1 Started 
+# Aynı token ile istek: oturum düşmedi
+$ curl -H 'Authorization: Bearer <token>' http://localhost:8080/api/ben
+{"id":7,"ad":"Mehmet","soyad":"Yıldız","eposta":"mehmet.yildiz@ogr.kampus.edu.tr","rol":"ogrenci","ogrenci_no":"251229002","bakiye":1095}
+# Çıkış: oturum silinir
+{"mesaj":"Çıkış yapıldı."}
+$ docker compose exec redis redis-cli EXISTS oturum:175598de07fa628d9017e1384ade75558b7d90ec29182d4ee3159bd7fd5fcbe8
+0
+
+{"hata":"Oturumunuz yok ya da süresi doldu. Lütfen tekrar giriş yapın."}
