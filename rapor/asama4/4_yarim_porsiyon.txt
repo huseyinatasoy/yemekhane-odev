@@ -1,0 +1,30 @@
+# Kullanıcı: mehmet.yildiz (öğrenci). Mühendislik, 18.11.2026. Menü id: kahvaltı=70 öğle=71 akşam=72
+# Haftalık listede öğle için tam ve yarım fiyat (fn_porsiyon_ucret):
+"ogun":"Öğle" "fiyat":40 "yarim_porsiyon":true "yarim_fiyat":24 
+
+# 1) Kahvaltıda yarım porsiyon reddedilir
+POST /api/rezervasyonlar {"menu_id":70,"porsiyon":"yarim"}
+{"hata":"Bu öğünde yarım porsiyon seçilemez."}
+
+# 2) Öğlede yarım porsiyon: ücret tam fiyatın %60'ı
+POST /api/rezervasyonlar {"menu_id":71,"porsiyon":"yarim"}
+{"mesaj":"Rezervasyon yapıldı.","rezervasyon_id":374,"ucret":24,"bakiye":1071,"porsiyon":"yarim"}
+
+# 3) Akşamda tam porsiyon (porsiyon gönderilmezse tam)
+POST /api/rezervasyonlar {"menu_id":72}
+{"mesaj":"Rezervasyon yapıldı.","rezervasyon_id":375,"ucret":40,"bakiye":1031,"porsiyon":"tam"}
+
+# 4) Geçersiz porsiyon: POST {"menu_id":70,"porsiyon":"ceyrek"}
+{"hata":"Geçersiz porsiyon seçimi."}
+
+# 5) Replikada porsiyon kayıtları ve bakiye hareketleri
+id	menu_id	ogun	porsiyon	ucret	tam_fiyat
+375	72	Akşam	tam	40.00	40.00
+374	71	Öğle	yarim	24.00	40.00
+tur	tutar	aciklama
+rezervasyon	-40.00	Rezervasyon
+rezervasyon	-24.00	Rezervasyon (yarım porsiyon)
+
+# 6) Geçmiş rezervasyonlar tam porsiyon sayılır
+porsiyon	COUNT(*)
+tam	373

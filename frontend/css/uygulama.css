@@ -176,6 +176,23 @@ table.tablo { width: 100%; border-collapse: collapse; font-size: var(--boyut-kuc
 .yemek-secim input { width: auto; }
 .iki-sutun { display: grid; gap: 0.75rem; grid-template-columns: 1fr; }
 
+/* ---------- Aşama 4: alerjen uyarısı, porsiyon, profil ---------- */
+.yemek-uyari {
+  background: var(--hata-zemin);
+  border-left: 4px solid var(--hata);
+  padding-inline: 0.6rem;
+  border-radius: var(--kose);
+}
+.yemek-uyari .yemek-ad { color: var(--hata); }
+.uyari-metni { grid-column: 1 / -1; color: var(--hata); font-size: var(--boyut-kucuk); font-weight: 600; }
+select.porsiyon { padding: 0.45rem 0.6rem; font-size: var(--boyut-kucuk); }
+.secim-izgara { display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem 0.75rem; margin-bottom: 1rem; }
+.secim-izgara label { display: flex; align-items: center; gap: 0.5rem; font-weight: 400; padding: 0.3rem 0; }
+.secim-izgara input { width: auto; }
+.bilgiler { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1rem; margin: 0; }
+.bilgiler dt { font-weight: 600; color: var(--metin-soluk); }
+.bilgiler dd { margin: 0; overflow-wrap: anywhere; }
+
 /* ---------- Giriş ---------- */
 .giris-kutu { max-width: 420px; margin: 3rem auto; }
 .giris-kutu .dugme { width: 100%; }

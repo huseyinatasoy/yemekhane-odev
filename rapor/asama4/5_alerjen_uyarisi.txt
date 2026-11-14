@@ -1,0 +1,18 @@
+# Alerjen uyarısı · kullanıcı mehmet.yildiz profilinde Gluten ve Süt seçer
+[{"id":13,"ad":"Acı bakla"},{"id":4,"ad":"Balık"},{"id":1,"ad":"Gluten"},{"id":10,"ad":"Hardal"},{"id":2,"ad":"Kabuklu deniz ürünleri"},{"id":9,"ad":"Kereviz"},{"id":8,"ad":"Sert kabuklu yemişler"},{"id":6,"ad":"Soya"},{"id":11,"ad":"Susam"},{"id":12,"ad":"Sülfitler"},{"id":7,"ad":"Süt"},{"id":5,"ad":"Yer fıstığı"},{"id":3,"ad":"Yumurta"},{"id":14,"ad":"Yumuşakçalar"}]
+
+PUT /api/profil/alerjenler {"alerjen_idler":[1,7]}
+{"mesaj":"Alerjen tercihleriniz kaydedildi.","alerjen_idler":[1,7]}
+
+# Günün menüsü: uyarılı yemekler (uyari=true) — menü Redis'ten gelse bile uyarı kişiye özel eklenir
+"ad":"Ezogelin Çorbası","kategori":"Çorba"	"uyari":true,"uyari_alerjenler":["Gluten"]
+"ad":"Izgara Köfte","kategori":"Ana Yemek"	"uyari":true,"uyari_alerjenler":["Gluten"]
+"ad":"Fırın Makarna","kategori":"Yardımcı Yemek"	"uyari":true,"uyari_alerjenler":["Gluten","Süt"]
+"ad":"Çoban Salata","kategori":"Salata ve Meze"	"uyari":false,"uyari_alerjenler":[]
+[ÖNBELLEK] menu:1:2026-11-15:2 -> veritabanından geldi
+[ÖNBELLEK] menu:1:2026-11-15:2 -> Redis'ten geldi
+
+# Replikada kullanici_alerjenleri
+kullanici_id	ad
+7	Gluten
+7	Süt

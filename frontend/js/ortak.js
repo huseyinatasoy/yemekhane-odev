@@ -9,6 +9,7 @@ const Ortak = {
     { id: 'rezervasyonlarim', ad: 'Rezervasyonlarım', adres: '/rezervasyonlarim.html' },
     { id: 'bakiye', ad: 'Bakiye', adres: '/bakiye.html' },
     { id: 'degerlendirme', ad: 'Değerlendirme', adres: '/degerlendirme.html' },
+    { id: 'profil', ad: 'Profil', adres: '/profil.html' },
     { id: 'yonetici', ad: 'Yönetici', adres: '/yonetici.html', rol: 'yonetici' },
   ],
 
@@ -111,4 +112,5 @@ const Ortak = {
   },
 
   durumAdi: { aktif: 'Aktif', kullanildi: 'Kullanıldı', iptal: 'İptal' },
+  porsiyonAdi: { tam: 'Tam porsiyon', yarim: 'Yarım porsiyon' },
 };

@@ -1,0 +1,20 @@
+# Yeni uygulama sürümü dağıtılmadan önce Redis'te eski yapıdaki menü kayıtları (alerjen_idler ve surum alanı yok)
+$ docker compose exec redis redis-cli KEYS menu:*
+menu:1:2026-11-15:2
+menu:1:2026-11-16:3
+menu:2:2026-11-17:2
+menu:1:2026-11-15:1
+
+$ docker compose exec redis redis-cli GET menu:1:2026-11-15:1   (kısaltılmış)
+{"menu_id":49,"tarih":"2026-11-15","yemekhane":"Merkez Yemekhane","ogun":"Kahvaltı","rezervasyon_son":"2026-11-15 07:00:00","ogrenci_fiyati":25,"personel_fiyati":50,"toplam_kalori":622,"yemekler":[{"id":47,"ad":"Bal ve Tereyağı","kategori":"Kahvaltılık","kalori":150,"vejetaryen":true,"alerjenle
+
+# Yeni uygulama dağıtılır: açılışta eski kayıtlar SCAN ile bulunup silinir
+$ docker compose up -d --build uygulama
+$ docker compose logs uygulama --since 2m
+[REDIS] Bağlandı.
+[ÖNBELLEK] Eski yapıdaki 4 menü kaydı silindi.
+Uygulama 8000 portunda çalışıyor.
+
+$ docker compose exec redis redis-cli KEYS menu:*
+
+

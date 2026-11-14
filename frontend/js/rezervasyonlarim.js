@@ -25,7 +25,7 @@
       <li class="liste-oge">
         <div>
           <strong>${Ortak.tarihYaz(r.tarih)} · ${Ortak.kacis(r.ogun)}</strong><br>
-          <span class="soluk">${Ortak.kacis(r.yemekhane)} · ${Ortak.tl(r.ucret)}</span>
+          <span class="soluk">${Ortak.kacis(r.yemekhane)} · ${Ortak.porsiyonAdi[r.porsiyon]} · ${Ortak.tl(r.ucret)}</span>
         </div>
         <div>
           <span class="durum durum-${r.durum}">${Ortak.durumAdi[r.durum]}</span>

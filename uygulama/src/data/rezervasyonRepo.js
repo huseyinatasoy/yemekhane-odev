@@ -1,9 +1,10 @@
 // Rezervasyon işlemleri. Para hareketi olduğu için yazma işlemleri stored procedure ile yapılır.
 const { okuma, yordamCagir } = require('./db');
 
-// Dönen: { rezervasyon_id, ucret, bakiye }  (bakiye kaynaktaki güncel değerdir)
-function rezervasyonYap(kullaniciId, menuId) {
-  return yordamCagir('sp_rezervasyon_yap', [kullaniciId, menuId]);
+// Aşama 4: porsiyon parametresi eklendi ('tam' | 'yarim').
+// Dönen: { rezervasyon_id, ucret, bakiye, porsiyon }  (bakiye kaynaktaki güncel değerdir)
+function rezervasyonYap(kullaniciId, menuId, porsiyon) {
+  return yordamCagir('sp_rezervasyon_yap', [kullaniciId, menuId, porsiyon]);
 }
 
 // Dönen: { rezervasyon_id, iade, bakiye }
@@ -16,7 +17,7 @@ function rezervasyonIptal(kullaniciId, rezervasyonId) {
 // degerlendirilebilir: kullanılmış ve henüz puan verilmemiş
 async function kullanicininRezervasyonlari(kullaniciId) {
   const [satirlar] = await okuma.query(
-    `SELECT r.id, r.menu_id, r.durum, r.ucret, r.olusturma,
+    `SELECT r.id, r.menu_id, r.durum, r.porsiyon, r.ucret, r.olusturma,
             m.tarih, o.ad AS ogun, yh.ad AS yemekhane,
             TIMESTAMP(m.tarih, o.son_saat) AS rezervasyon_son,
             (r.durum = 'aktif' AND NOW() < TIMESTAMP(m.tarih, o.son_saat)) AS iptal_edilebilir,

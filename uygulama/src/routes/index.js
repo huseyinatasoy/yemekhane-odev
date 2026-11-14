@@ -10,6 +10,7 @@ const rezervasyon = require('../controllers/rezervasyonController');
 const bakiye = require('../controllers/bakiyeController');
 const degerlendirme = require('../controllers/degerlendirmeController');
 const yonetici = require('../controllers/yoneticiController');
+const profil = require('../controllers/profilController');
 
 const router = express.Router();
 
@@ -38,6 +39,11 @@ router.post('/bakiye/yukle', girisGerekli, bakiye.yukle);
 
 // Değerlendirme
 router.post('/degerlendirmeler', girisGerekli, degerlendirme.ekle);
+
+// Profil: alerjen tercihleri (Aşama 4)
+router.get('/alerjenler', girisGerekli, profil.alerjenler);
+router.get('/profil/alerjenler', girisGerekli, profil.alerjenlerimGetir);
+router.put('/profil/alerjenler', girisGerekli, profil.alerjenlerimKaydet);
 
 // Yönetici paneli
 router.get('/yonetici/yemekler', girisGerekli, yoneticiGerekli, yonetici.yemekler);

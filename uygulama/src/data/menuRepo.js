@@ -42,12 +42,14 @@ async function haftalik(yemekhaneId, baslangic, kullaniciId, rol) {
             d.rezervasyon_son,
             (NOW() >= d.rezervasyon_son)                              AS suresi_doldu,
             IF(? = 'ogrenci', m.ogrenci_fiyati, m.personel_fiyati)    AS fiyat,
+            o.yarim_porsiyon,
+            fn_porsiyon_ucret(IF(? = 'ogrenci', m.ogrenci_fiyati, m.personel_fiyati), 'yarim') AS yarim_fiyat,
             (SELECT GROUP_CONCAT(y.ad ORDER BY k.sira SEPARATOR ', ')
                FROM menu_yemekleri my
                JOIN yemekler y ON y.id = my.yemek_id
                JOIN yemek_kategorileri k ON k.id = y.kategori_id
               WHERE my.menu_id = d.menu_id)                           AS yemekler,
-            r.id AS rezervasyon_id, r.durum AS rezervasyon_durum
+            r.id AS rezervasyon_id, r.durum AS rezervasyon_durum, r.porsiyon AS rezervasyon_porsiyon
        FROM v_menu_doluluk d
        JOIN menuler m ON m.id = d.menu_id
        JOIN ogunler o ON o.id = d.ogun_id
@@ -55,7 +57,7 @@ async function haftalik(yemekhaneId, baslangic, kullaniciId, rol) {
       WHERE d.yemekhane_id = ?
         AND d.tarih BETWEEN ? AND DATE_ADD(?, INTERVAL 6 DAY)
       ORDER BY d.tarih, o.sira`,
-    [rol, kullaniciId, yemekhaneId, baslangic, baslangic]
+    [rol, rol, kullaniciId, yemekhaneId, baslangic, baslangic]
   );
   return satirlar;
 }

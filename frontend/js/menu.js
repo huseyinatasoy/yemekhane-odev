@@ -36,18 +36,24 @@
   }
 
   function menuHtml(menu) {
+    // Aşama 4: kullanıcının alerjenini içeren yemekleri sunucu "uyari" ile işaretler
+    const uyariSayisi = menu.yemekler.filter((y) => y.uyari).length;
     const yemekler = menu.yemekler.map((y) => `
-      <li class="yemek">
+      <li class="yemek${y.uyari ? ' yemek-uyari' : ''}">
         <div>
-          <div class="yemek-ad">${Ortak.kacis(y.ad)}</div>
+          <div class="yemek-ad">${y.uyari ? '⚠ ' : ''}${Ortak.kacis(y.ad)}</div>
           <div class="yemek-kategori">${Ortak.kacis(y.kategori)}</div>
         </div>
         <div class="yemek-kalori">${y.kalori} kcal</div>
+        ${y.uyari ? `<div class="uyari-metni" role="note">Alerjeniniz: ${y.uyari_alerjenler.map(Ortak.kacis).join(', ')}</div>` : ''}
         <div class="yemek-etiketler">
           ${y.vejetaryen ? '<span class="etiket etiket-vejetaryen">Vejetaryen</span>' : ''}
           ${y.alerjenler.map((a) => `<span class="etiket etiket-alerjen">${Ortak.kacis(a)}</span>`).join('')}
         </div>
       </li>`).join('');
+    const uyariKutusu = uyariSayisi
+      ? `<p class="bildirim bildirim-hata" role="alert">Bu menüde alerjenlerinizi içeren ${uyariSayisi} yemek var.</p>`
+      : '';
 
     return `
       <div class="menu-ust">
@@ -59,7 +65,9 @@
         <span class="etiket">Personel: ${Ortak.tl(menu.personel_fiyati)}</span>
         <span class="etiket">Son rezervasyon: ${Ortak.zamanYaz(menu.rezervasyon_son)}</span>
       </div>
+      ${uyariKutusu}
       <ul class="yemek-listesi">${yemekler}</ul>
+      <p class="soluk">Alerjenlerinizi <a href="/profil.html">Profil</a> sayfasından seçebilirsiniz.</p>
       <p class="toplam">Toplam: ${menu.toplam_kalori} kcal</p>
       <a class="dugme" href="/haftalik.html?yemekhane_id=${yemekhaneSec.value}&baslangic=${menu.tarih}">Rezervasyon yap</a>`;
   }

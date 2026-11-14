@@ -1,5 +1,6 @@
 // Menü ekranları: günün menüsü ve haftalık menü
 const menuRepo = require('../data/menuRepo');
+const alerjenRepo = require('../data/alerjenRepo');
 const menuOnbellek = require('../services/menuOnbellek');
 const dogrula = require('./dogrula');
 
@@ -42,7 +43,22 @@ function menuNesnesi(satirlar) {
       kalori: s.kalori,
       vejetaryen: s.vejetaryen === 1,
       alerjenler: s.alerjenler ? s.alerjenler.split(', ') : [],
+      alerjen_idler: s.alerjen_idler ? s.alerjen_idler.split(',').map(Number) : [],
     })),
+  };
+}
+
+// Aşama 4 · Alerjen uyarısı: kullanıcının alerjenlerini içeren yemekleri işaretler.
+// Önbellekteki menü herkes için aynıdır; kişiye özel uyarı önbellekten SONRA eklenir.
+// kullaniciAlerjenleri: [{ id, ad }]
+function alerjenUyarisiEkle(menu, kullaniciAlerjenleri) {
+  if (!menu) return null;
+  return {
+    ...menu,
+    yemekler: menu.yemekler.map((y) => {
+      const ortak = kullaniciAlerjenleri.filter((a) => y.alerjen_idler.includes(a.id));
+      return { ...y, uyari: ortak.length > 0, uyari_alerjenler: ortak.map((a) => a.ad) };
+    }),
   };
 }
 
@@ -54,10 +70,13 @@ async function gununMenusu(req, res, next) {
     const ogunId = dogrula.tamSayi(req.query.ogun_id, 'öğün');
 
     // Önce Redis'e bakılır; yoksa veritabanından okunup Redis'e yazılır
-    const menu = await menuOnbellek.getir(yemekhaneId, tarih, ogunId, async () =>
-      menuNesnesi(await menuRepo.menuDetay(yemekhaneId, tarih, ogunId))
-    );
-    res.json({ menu });
+    const [menu, alerjenlerim] = await Promise.all([
+      menuOnbellek.getir(yemekhaneId, tarih, ogunId, async () =>
+        menuNesnesi(await menuRepo.menuDetay(yemekhaneId, tarih, ogunId))
+      ),
+      alerjenRepo.kullanicininAlerjenleri(req.kullanici.id),
+    ]);
+    res.json({ menu: alerjenUyarisiEkle(menu, alerjenlerim) });
   } catch (hata) {
     next(hata);
   }
@@ -74,6 +93,7 @@ async function haftalik(req, res, next) {
       satirlar.map((s) => ({
         ...s,
         suresi_doldu: s.suresi_doldu === 1,
+        yarim_porsiyon: s.yarim_porsiyon === 1,
         // Rezervasyon düğmesi ne zaman açık: süre dolmamış, yer var, kullanıcının aktif/kullanılmış kaydı yok
         rezerve_edilebilir:
           s.suresi_doldu !== 1 && s.bos_yer > 0 && !['aktif', 'kullanildi'].includes(s.rezervasyon_durum),

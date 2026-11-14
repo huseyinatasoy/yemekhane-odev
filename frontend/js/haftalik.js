@@ -48,6 +48,17 @@
     else if (m.suresi_doldu) dugmeYazisi = 'Süre doldu';
     else if (m.bos_yer <= 0) dugmeYazisi = 'Kapasite dolu';
 
+    // Aşama 4: yarım porsiyon yalnızca sunucu izin veriyorsa (öğle/akşam) gösterilir;
+    // yarım fiyatı da sunucu hesaplar (fn_porsiyon_ucret).
+    const porsiyonSecimi = m.rezerve_edilebilir && m.yarim_porsiyon
+      ? `<select class="porsiyon" aria-label="Porsiyon">
+           <option value="tam">Tam porsiyon · ${Ortak.tl(m.fiyat)}</option>
+           <option value="yarim">Yarım porsiyon · ${Ortak.tl(m.yarim_fiyat)}</option>
+         </select>`
+      : '';
+    const mevcutPorsiyon = m.rezervasyon_durum && m.rezervasyon_durum !== 'iptal'
+      ? `<span class="soluk">${Ortak.porsiyonAdi[m.rezervasyon_porsiyon]}</span>` : '';
+
     return `
       <article class="ogun-karti">
         <div class="baslik"><span>${Ortak.kacis(m.ogun)}</span><span class="fiyat">${Ortak.tl(m.fiyat)}</span></div>
@@ -56,6 +67,7 @@
           <span>Boş yer: <span class="bos-yer">${m.bos_yer}</span> / ${m.kapasite}</span>
           <span class="soluk">Son: ${Ortak.zamanYaz(m.rezervasyon_son).slice(-5)}</span>
         </div>
+        ${porsiyonSecimi}${mevcutPorsiyon}
         <button type="button" class="dugme" data-menu="${m.menu_id}" ${m.rezerve_edilebilir ? '' : 'disabled'}>${dugmeYazisi}</button>
       </article>`;
   }
@@ -66,7 +78,11 @@
     if (!dugme || dugme.disabled) return;
     dugme.disabled = true;
     try {
-      const sonuc = await Api.post('/rezervasyonlar', { menu_id: Number(dugme.dataset.menu) });
+      const secim = dugme.closest('.ogun-karti').querySelector('select.porsiyon');
+      const sonuc = await Api.post('/rezervasyonlar', {
+        menu_id: Number(dugme.dataset.menu),
+        porsiyon: secim ? secim.value : 'tam',
+      });
       // Yordamın döndürdüğü bakiye kaynaktan gelir: replikasyon gecikmesinden etkilenmez
       Ortak.bakiyeGuncelle(sonuc.bakiye);
       Ortak.bildir('bildirim', `${sonuc.mesaj} Ücret: ${Ortak.tl(sonuc.ucret)} · Kalan bakiye: ${Ortak.tl(sonuc.bakiye)}`, 'basari');

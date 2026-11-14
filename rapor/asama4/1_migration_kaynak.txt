@@ -1,0 +1,27 @@
+# ÖNCE: mevcut veri
+$ docker compose exec -T mysql-primary mysql --default-character-set=utf8mb4 -uroot -pyemekhane_kok yemekhane -e "SELECT durum, COUNT(*) adet, SUM(ucret) toplam_ucret FROM rezervasyonlar GROUP BY durum"
+durum	adet	toplam_ucret
+kullanildi	167	7315.00
+iptal	46	1985.00
+aktif	160	7160.00
+
+# Migration yalnızca KAYNAKTA çalıştırılır
+$ docker compose exec -T mysql-primary mysql -uroot -pyemekhane_kok yemekhane < db/init/04_degisiklik.sql
+
+# SONRA: mevcut rezervasyonlar bozulmadı, hepsi 'tam' porsiyon
+$ docker compose exec -T mysql-primary mysql --default-character-set=utf8mb4 -uroot -pyemekhane_kok yemekhane -e "SELECT durum, porsiyon, COUNT(*) adet, SUM(ucret) toplam_ucret FROM rezervasyonlar GROUP BY durum, porsiyon"
+durum	porsiyon	adet	toplam_ucret
+kullanildi	tam	167	7315.00
+iptal	tam	46	1985.00
+aktif	tam	160	7160.00
+
+$ docker compose exec -T mysql-primary mysql --default-character-set=utf8mb4 -uroot -pyemekhane_kok yemekhane -e "SELECT id, ad, son_saat, yarim_porsiyon FROM ogunler"
+id	ad	son_saat	yarim_porsiyon
+1	Kahvaltı	07:00:00	0
+2	Öğle	10:00:00	1
+3	Akşam	15:00:00	1
+
+$ docker compose exec -T mysql-primary mysql --default-character-set=utf8mb4 -uroot -pyemekhane_kok yemekhane -e "SELECT fn_porsiyon_ucret(40, 'tam') tam, fn_porsiyon_ucret(40, 'yarim') yarim"
+tam	yarim
+40.00	24.00
+

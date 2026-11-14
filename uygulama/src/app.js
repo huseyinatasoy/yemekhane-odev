@@ -6,6 +6,7 @@ const express = require('express');
 const router = require('./routes');
 const { hataYakalayici } = require('./middleware/hata');
 const redis = require('./services/redis');
+const menuOnbellek = require('./services/menuOnbellek');
 
 const app = express();
 const PORT = 8000;
@@ -28,8 +29,10 @@ app.use('/api', (req, res) => res.status(404).json({ hata: 'İstenen adres bulun
 
 app.use(hataYakalayici);
 
-// Önce Redis'e bağlan, sonra istekleri kabul etmeye başla
-redis.connect().then(() => {
+// Önce Redis'e bağlan ve eski yapıdaki menü önbelleğini temizle,
+// sonra istekleri kabul etmeye başla
+redis.connect().then(async () => {
+  await menuOnbellek.eskiKayitlariTemizle();
   app.listen(PORT, () => {
     console.log(`Uygulama ${PORT} portunda çalışıyor.`);
   });
