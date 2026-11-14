@@ -1,0 +1,8 @@
+$ docker compose ps -a
+NAME                        IMAGE                COMMAND                  SERVICE         CREATED          STATUS                      PORTS
+yemekhane-frontend-1        yemekhane-frontend   "httpd-foreground -D…"   frontend        44 seconds ago   Up 42 seconds (healthy)     0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+yemekhane-mysql-primary-1   mysql:8.4            "docker-entrypoint.s…"   mysql-primary   44 seconds ago   Up 42 seconds (healthy)     0.0.0.0:3307->3306/tcp, [::]:3307->3306/tcp
+yemekhane-mysql-replica-1   mysql:8.4            "docker-entrypoint.s…"   mysql-replica   44 seconds ago   Up 41 seconds (healthy)     0.0.0.0:3308->3306/tcp, [::]:3308->3306/tcp
+yemekhane-redis-1           redis:7.4-alpine     "docker-entrypoint.s…"   redis           44 seconds ago   Up 42 seconds (healthy)     0.0.0.0:6379->6379/tcp, [::]:6379->6379/tcp
+yemekhane-replica-setup-1   mysql:8.4            "bash /replica-setup…"   replica-setup   43 seconds ago   Exited (0) 14 seconds ago   
+

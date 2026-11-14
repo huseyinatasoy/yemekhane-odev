@@ -1,0 +1,19 @@
+# Önce: kaynak ve replika aynı bakiyeyi gösteriyor
+$ docker compose exec -T mysql-primary mysql --default-character-set=utf8mb4 -uyemekhane_app -pUyg_2026 yemekhane -e "SELECT id, ad, soyad, bakiye FROM kullanicilar WHERE id = 7"
+id	ad	soyad	bakiye
+7	Mehmet	Yıldız	755.00
+
+$ docker compose exec -T mysql-replica mysql --default-character-set=utf8mb4 -uyemekhane_app -pUyg_2026 yemekhane -e "SELECT id, ad, soyad, bakiye FROM kullanicilar WHERE id = 7"
+id	ad	soyad	bakiye
+7	Mehmet	Yıldız	755.00
+
+# Kaynakta bakiye yükle
+$ docker compose exec -T mysql-primary mysql --default-character-set=utf8mb4 -uyemekhane_app -pUyg_2026 yemekhane -e "CALL sp_bakiye_yukle(7, 100)"
+hareket_id	bakiye
+458	855.00
+
+# Replikada yeni bakiye görünüyor
+$ docker compose exec -T mysql-replica mysql --default-character-set=utf8mb4 -uyemekhane_app -pUyg_2026 yemekhane -e "SELECT id, ad, soyad, bakiye FROM kullanicilar WHERE id = 7"
+id	ad	soyad	bakiye
+7	Mehmet	Yıldız	855.00
+

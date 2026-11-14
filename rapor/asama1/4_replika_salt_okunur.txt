@@ -1,0 +1,7 @@
+$ docker compose exec -T mysql-replica mysql -uyemekhane_app -pUyg_2026 yemekhane -e "CALL sp_bakiye_yukle(7, 50)"
+ERROR 1290 (HY000) at line 1: The MySQL server is running with the --super-read-only option so it cannot execute this statement
+
+$ docker compose exec -T mysql-replica mysql -uroot -pyemekhane_kok -e "SELECT @@read_only, @@super_read_only"
+@@read_only	@@super_read_only
+1	1
+
